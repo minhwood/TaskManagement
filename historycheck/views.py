@@ -1,27 +1,40 @@
-from django.shortcuts import render
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from .responses.task_responses import TaskResponse
-from django.shortcuts import get_object_or_404
-
+from rest_framework import generics, mixins
 from .models import Task
+from historycheck.responses.task_serializers import TaskSerializer
+from django.db.models import Q
 
-#responses Define
-task_responses = TaskResponse()
+from datetime import datetime
 
-@api_view(['GET'])
-def list(request):
-    task = Task.objects.all()
-    return Response(task_responses.convertToResponse(task))
+class TaskCreateView(mixins.CreateModelMixin, generics.ListAPIView):
+    lookupfield = 'pk'
+    serializer_class = TaskSerializer
 
-@api_view(['POST'])
-def create(request):
-    return Response("POST")
+    #for search
+    def get_queryset(self):
+        qs = Task.objects.all()
+        search = self.request.GET.get("search")
+        if (search) is not None:
+            qs = qs.filter(
+                Q(task_name__icontains=search)|
+                Q(task_description__icontains=search)
+            ).distinct()
+        return qs
 
-@api_view(['UPDATE'])
-def update(request):
-    return Response("UPDATE")
+    #action when perform create action
+    def perform_create(self, serializer):
+        serializer.save(created_at=datetime.now())
 
-@api_view(['DELETE'])
-def delete(request):
-    return Response("DELETE")
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+class TaskRUDView(generics.RetrieveUpdateDestroyAPIView):
+    pass
+    lookupfield = 'pk'
+    serializer_class = TaskSerializer
+
+    def get_queryset(self):
+        return Task.objects.all()
+    
+    def get_object(self):
+        pk = self.kwargs.get("pk")
+        return Task.objects.get(pk=pk)
