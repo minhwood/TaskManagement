@@ -16,4 +16,12 @@ def list(request):
 
 @api_view(['POST'])
 def create(request):
-    return Response("Post")
+    return Response("POST")
+
+@api_view(['UPDATE'])
+def update(request):
+    return Response("UPDATE")
+
+@api_view(['DELETE'])
+def delete(request):
+    return Response("DELETE")
