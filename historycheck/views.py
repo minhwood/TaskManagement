@@ -28,7 +28,6 @@ class TaskCreateView(mixins.CreateModelMixin, generics.ListAPIView):
         return self.create(request, *args, **kwargs)
 
 class TaskRUDView(generics.RetrieveUpdateDestroyAPIView):
-    pass
     lookupfield = 'pk'
     serializer_class = TaskSerializer
 
