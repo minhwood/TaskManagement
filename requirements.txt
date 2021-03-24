@@ -44,7 +44,7 @@ python-dateutil==2.8.1
 pytz==2018.7
 PyYAML==5.2
 requests==2.23.0
-rsa==4.0
+rsa==4.1
 s3transfer==0.3.0
 six==1.11.0
 slackbot==0.5.6
