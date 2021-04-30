@@ -53,7 +53,7 @@ slacker==0.14.0
 soupsieve==2.0
 typed-ast==1.4.1
 uritemplate==3.0.0
-urllib3==1.25.7
+urllib3==1.25.8
 uWSGI==2.0.17.1
 virtualenv==20.0.15
 wcwidth==0.1.9
